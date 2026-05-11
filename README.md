@@ -33,9 +33,9 @@ The major difference with the inference environment is installing ros2. This is 
 
 ```bash
 # Create a ros-jazzy desktop environment
-conda create -n srth-new-ros2 -c conda-forge -c robostack-jazzy ros-jazzy-desktop
+conda create -n robot_learning-ros2 -c conda-forge -c robostack-jazzy ros-jazzy-desktop
 # Activate the environment
-conda activate srth-new-ros2
+conda activate robot_learning-ros2
 # Add the robostack channel to the environemnt
 conda config --env --add channels robostack-jazzy
 ```
@@ -59,7 +59,7 @@ cd ~/ros2_ws
 colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release --symlink-install
 ```
 
-Now, any time you wish to communicate with the robot, you must activate the `srth-new-ros2` conda environment and source the `ros2_ws` with:
+Now, any time you wish to communicate with the robot, you must activate the `robot_learning-ros2` conda environment and source the `ros2_ws` with:
 
 ```bash
 source ~/ros2_ws/install/setup.bash
@@ -84,7 +84,7 @@ We use [LeRobot](https://github.com/huggingface/lerobot) for our dataset. We col
 Once you have your raw data, you must create a LeRobot dataset from the raw data by running the following:
 
 ```bash
-python src/srth-new/low_level_policy/dataset/convert_raw_data_to_lerobot_format.py \
+python src/robot_learning/low_level_policy/dataset/convert_raw_data_to_lerobot_format.py \
   --source-dir <absolute_path_to_raw_dataset_root_dir> \
   --repo-id <what_you_want_your_dataset_name_to_be **must be unique**>
 ```
@@ -98,12 +98,12 @@ We use [Hydra](https://hydra.cc/) to create configuration files and manage runs.
 ## Run Training with Default Configuration
 
 ```bash
-python src/srth-new/low_level_policy/train.py
+python src/robot_learning/low_level_policy/train.py
 ```
 
 ## Run Inference
 
 ```bash
-python src/srth-new/low_level_policy/run_inference.py \ 
+python src/robot_learning/low_level_policy/run_inference.py \ 
   checkpoint_path=<path_to_checkpoint_file>
 ```
