@@ -1,0 +1,40 @@
+defaults:
+  - dataloader: example                # Sample dataloader settings for low-level training.
+  - policy: act                        # ACT policy architecture and optimizer defaults.
+  - override hydra/job_logging: custom # Write logs both to stdout and to the Hydra run dir.
+  - _self_
+
+seed: 1          # Global random seed for NumPy / PyTorch / data shuffling.
+device: cuda     # Falls back to CPU only if the training code is updated to do so explicitly.
+
+# these will pass to both policy and dataloader cfgs.
+# its easier to define them once as they must be consistent
+# across policy and dataloader
+action_mode: hybrid_relative
+ll_history_chunk_size: 0
+ll_future_chunk_size: 60
+
+
+train:
+  num_train_steps: 500000
+  num_warmup_steps: 50000
+  save_every: 10000            # Save a checkpoint every N training steps.
+  keep_every: 50000            # Prune checkpoints so only one representative checkpoint survives per bin.
+  validate_every: 1000         # Run the validation loop every N training steps.
+  checkpoint_dir: ${hydra:runtime.output_dir}/checkpoints
+  resume_checkpoint: null   # Optional checkpoint path to resume model/optimizer/scheduler state from.
+
+wandb:
+  project: surpass_debugging              # W&B project name.
+  entity: gbyrd3-johns-hopkins-university # W&B team / user namespace.
+  name: ll_policy_test_full_actions_scoring       # Human-readable run name.
+
+  # resume settings
+  resume: false        # Set true to restore config state from a previous W&B run.
+  id: null             # Required when resuming; optional otherwise.
+  mode: online         # online OR offline OR disabled
+
+hydra:
+  run:
+    # Each run gets its own timestamped directory with logs, configs, and checkpoints.
+    dir: outputs/low_level_policy/train/${now:%Y-%m-%d}/${now:%H-%M-%S}
